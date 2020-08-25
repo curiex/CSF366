@@ -54,7 +54,7 @@ vector<int> cores(vector<int> adj[],int v){
 		bin[i]=0;
 	}
 	for(int i=0;i<=v;++i){
-		bin(degree[i])++;
+		bin[degree[i]]++;
 	}
 	
 	int start=1;
@@ -69,7 +69,7 @@ vector<int> cores(vector<int> adj[],int v){
 	for(int i=1;i<=v;++i){
 		pos[i]=bin[degree[i]];
 		vert[pos[v]]=i;
-		bin(degree[i])++;
+		bin[degree[i]]++;
 	}
 	
 	for(int i=md;i>;--i){
