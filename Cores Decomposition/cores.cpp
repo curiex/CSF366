@@ -1,19 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
 //undirected graph add edge function
 void addEdge(vector<int> adj[],int u, int y){
 	adj[u].push_back(y);
-	adj[v].push_back(u);
+	adj[y].push_back(u);
 }
 
-int neighbours(int x,vector<int> adj[],bool visited[]){
+vector<int> neighbours(int x,vector<int> adj[]){
+	vector<int> sol;
 	for(int y:adj[x]){
-		if(visited[y]==false){
-			return y;
-		}
+		sol.push_back(y);
 	}
-	return -1;
+	return sol;
 }
 
 //calculates no of nodes in the graph
@@ -33,17 +33,11 @@ int dov(vector<int> adj[],int degree[],int v){
 	return max;
 }
 
-vector<int> cores(vector<int> adj[],int v){
+int * cores(vector<int> adj[],int v){
 	//int v = size(adj);
 	
 	//array with degree of every vertex
 	int degree[v+1];
-	
-	//is the vertex visited or not
-	bool visited[v+1];
-	for(int i=0;i<=v;++i){
-		visited[i]=false;
-	}
 	
 	//calculating degree of every vertex and also calculating maximum degree
 	int md=dov(adj,degree,md);
@@ -72,17 +66,35 @@ vector<int> cores(vector<int> adj[],int v){
 		bin[degree[i]]++;
 	}
 	
-	for(int i=md;i>;--i){
+	for(int i=md;i>0;--i){
 		bin[i]=bin[i-1];
 	}
 	bin[0]=1;
 	
+	
 	//algorithm
-	int n,u,w,pu,du,pw;
+	int n,w,pu,du,pw;
 	for(int i=1;i<=v;i++){
-		int n=vert[i];
-		
+		n=vert[i];
+		vector<int> neigh=neighbours(n,adj);
+		for(int u:neigh){
+			if(degree[u]>degree[v]){
+				du=degree[u];
+				pu=pos[u];
+				pw=bin[du];
+				w=vert[pw];
+				if(u!=v){
+					pos[u]=pw;
+					vert[pu]=w;
+					pos[w]=pu;
+					vert[pw]=u;
+				}
+				bin[du]++;
+				degree[u]--;
+			}
+		}
 	}
+	return degree;
 }
 
 int main(){
@@ -100,6 +112,13 @@ int main(){
 	addEdge(adj,4,5);
 	addEdge(adj,5,6);
 	addEdge(adj,6,4);
+	
+	int* p;
+	p=cores(adj,v);
+	
+	for(int i=1;i<=v;i++){
+		cout << p[i] << " ";
+	}
 	
 	return 0;
 }
