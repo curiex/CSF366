@@ -16,38 +16,29 @@ vector<int> neighbours(int x,vector<int> adj[]){
 	return sol;
 }
 
-//calculates no of nodes in the graph
-int size(vector<int> adj[]){
-
-}
-
-//degree of each vertex
-int dov(vector<int> adj[],int degree[],int v){
-	int max=adj[1].size();
-	for(int i=1;i<=v;++i){
-		degree[i]=adj[i].size();
-		if(degree[i]>max){
-			max=degree[i];
-		}
-	}
-	return max;
-}
-
-int * cores(vector<int> adj[],int v){
-	//int v = size(adj);
+vector<int> cores(vector<int> adj[],int v){
 	
+	vector<int> solution;
 	//array with degree of every vertex
 	int degree[v+1];
 	
 	//calculating degree of every vertex and also calculating maximum degree
-	int md=dov(adj,degree,md);
-	
+	int md=0;
+	for(int i=1;i<=v;i++){
+		int m=0;
+		m=adj[i].size();
+		degree[i]=m;
+		if(m>md){
+			md=m;
+		}
+	}
+
 	//now to sort according to the degree of each vertex in O(m) time
 	int bin[v+1];
-	for(int i=0;i<=v;i++){
+	for(int i=0;i<=md;i++){
 		bin[i]=0;
 	}
-	for(int i=0;i<=v;++i){
+	for(int i=1;i<=v;++i){
 		bin[degree[i]]++;
 	}
 	
@@ -62,7 +53,7 @@ int * cores(vector<int> adj[],int v){
 	int vert[v+1];
 	for(int i=1;i<=v;++i){
 		pos[i]=bin[degree[i]];
-		vert[pos[v]]=i;
+		vert[pos[i]]=i;
 		bin[degree[i]]++;
 	}
 	
@@ -71,19 +62,18 @@ int * cores(vector<int> adj[],int v){
 	}
 	bin[0]=1;
 	
-	
 	//algorithm
 	int n,w,pu,du,pw;
 	for(int i=1;i<=v;i++){
 		n=vert[i];
 		vector<int> neigh=neighbours(n,adj);
 		for(int u:neigh){
-			if(degree[u]>degree[v]){
+			if(degree[u]>degree[n]){
 				du=degree[u];
 				pu=pos[u];
 				pw=bin[du];
 				w=vert[pw];
-				if(u!=v){
+				if(u!=w){
 					pos[u]=pw;
 					vert[pu]=w;
 					pos[w]=pu;
@@ -94,31 +84,59 @@ int * cores(vector<int> adj[],int v){
 			}
 		}
 	}
-	return degree;
+	for (int i=1;i<=v;i++){
+		solution.push_back(degree[i]);
+	}
+	return solution;
 }
 
 int main(){
-	//giving manual input for the vertices 
-	//if a graph is provided this would not be required
-	//size of the graph would then be calculated by size() function
-	int v=6;
+	//vertices in graph
+	int v=17;
 	//graph declartaion
 	vector<int> adj[v+1];
-	//testing graph
+	
 	//graph1
+	//addEdge(adj,1,2);
+	//addEdge(adj,1,3);
+	//addEdge(adj,3,2);
+	//addEdge(adj,3,4);
+	//addEdge(adj,4,5);
+	//addEdge(adj,5,6);
+	//addEdge(adj,6,4);
+	//graph2
 	addEdge(adj,1,2);
-	addEdge(adj,3,2);
+	addEdge(adj,2,5);
 	addEdge(adj,3,4);
-	addEdge(adj,4,5);
-	addEdge(adj,5,6);
-	addEdge(adj,6,4);
+	addEdge(adj,3,5);
+	addEdge(adj,3,8);
+	addEdge(adj,5,7);
+	addEdge(adj,5,8);
+	addEdge(adj,6,7);
+	addEdge(adj,7,8);
+	addEdge(adj,8,9);
+	addEdge(adj,6,10);
+	addEdge(adj,6,11);
+	addEdge(adj,7,11);
+	addEdge(adj,7,10);
+	addEdge(adj,10,11);
+	addEdge(adj,11,12);
+	addEdge(adj,12,13);
+	addEdge(adj,8,13);
+	addEdge(adj,9,14);
+	addEdge(adj,13,14);
+	addEdge(adj,12,15);
+	addEdge(adj,13,15);
+	addEdge(adj,16,15);
+	addEdge(adj,15,17);
+	addEdge(adj,9,13);
+	addEdge(adj,8,14);
 	
-	int* p;
-	p=cores(adj,v);
-	
-	for(int i=1;i<=v;i++){
-		cout << p[i] << " ";
-	}
-	
+	vector<int> ver=cores(adj,v);
+	for(int i:ver)
+		cout << i << " ";
 	return 0;
 }
+
+
+//terminal - x-terminal-emulator -e "/bin/sh %c"
