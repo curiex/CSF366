@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#define endl "\n"
 using namespace std;
 
 
@@ -20,11 +21,11 @@ vector<int> cores(vector<int> adj[],int v){
 	
 	vector<int> solution;
 	//array with degree of every vertex
-	int degree[v+1];
+	int degree[v];
 	
 	//calculating degree of every vertex and also calculating maximum degree
 	int md=0;
-	for(int i=1;i<=v;i++){
+	for(int i=0;i<v;i++){
 		int m=0;
 		m=adj[i].size();
 		degree[i]=m;
@@ -38,7 +39,7 @@ vector<int> cores(vector<int> adj[],int v){
 	for(int i=0;i<=md;i++){
 		bin[i]=0;
 	}
-	for(int i=1;i<=v;++i){
+	for(int i=0;i<v;++i){
 		bin[degree[i]]++;
 	}
 	
@@ -49,9 +50,9 @@ vector<int> cores(vector<int> adj[],int v){
 		start+=num;
 	}
 	
-	int pos[v+1];
-	int vert[v+1];
-	for(int i=1;i<=v;++i){
+	int pos[v];
+	int vert[v];
+	for(int i=0;i<v;++i){
 		pos[i]=bin[degree[i]];
 		vert[pos[i]]=i;
 		bin[degree[i]]++;
@@ -64,7 +65,7 @@ vector<int> cores(vector<int> adj[],int v){
 	
 	//algorithm
 	int n,w,pu,du,pw;
-	for(int i=1;i<=v;i++){
+	for(int i=0;i<v;i++){
 		n=vert[i];
 		vector<int> neigh=neighbours(n,adj);
 		for(int u:neigh){
@@ -84,57 +85,29 @@ vector<int> cores(vector<int> adj[],int v){
 			}
 		}
 	}
-	for (int i=1;i<=v;i++){
+	for (int i=0;i<v;i++){
 		solution.push_back(degree[i]);
 	}
 	return solution;
 }
 
 int main(){
-	//vertices in graph
-	int v=17;
-	//graph declartaion
-	vector<int> adj[v+1];
+	freopen( "input.txt", "r" , stdin);
+	freopen( "output.txt", "w" , stdout);
 	
-	//graph1
-	//addEdge(adj,1,2);
-	//addEdge(adj,1,3);
-	//addEdge(adj,3,2);
-	//addEdge(adj,3,4);
-	//addEdge(adj,4,5);
-	//addEdge(adj,5,6);
-	//addEdge(adj,6,4);
-	//graph2
-	addEdge(adj,1,2);
-	addEdge(adj,2,5);
-	addEdge(adj,3,4);
-	addEdge(adj,3,5);
-	addEdge(adj,3,8);
-	addEdge(adj,5,7);
-	addEdge(adj,5,8);
-	addEdge(adj,6,7);
-	addEdge(adj,7,8);
-	addEdge(adj,8,9);
-	addEdge(adj,6,10);
-	addEdge(adj,6,11);
-	addEdge(adj,7,11);
-	addEdge(adj,7,10);
-	addEdge(adj,10,11);
-	addEdge(adj,11,12);
-	addEdge(adj,12,13);
-	addEdge(adj,8,13);
-	addEdge(adj,9,14);
-	addEdge(adj,13,14);
-	addEdge(adj,12,15);
-	addEdge(adj,13,15);
-	addEdge(adj,16,15);
-	addEdge(adj,15,17);
-	addEdge(adj,9,13);
-	addEdge(adj,8,14);
+	int v;
+	cin >> v;
+	int n=204473;
+	vector<int> adj[n];
+	for(int i=0;i<v;i++){
+		int x,y;
+		cin >> x >> y;
+		addEdge(adj,x,y);
+	}
 	
-	vector<int> ver=cores(adj,v);
+	vector<int> ver=cores(adj,n);
 	for(int i:ver)
-		cout << i << " ";
+		cout << i << endl;
 	return 0;
 }
 
