@@ -12,7 +12,7 @@ int main(){
   }
   int sum = 0,i;
   double t1 = omp_get_wtime();
-  // #pragma omp parallel for reduction(+:sum)
+  #pragma omp parallel for reduction(+:sum)
   for(i = 0; i < n ; i++){
     // #pragma omp critical
     sum += arr[i];
